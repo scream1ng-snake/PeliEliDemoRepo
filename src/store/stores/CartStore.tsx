@@ -505,7 +505,9 @@ export class CartStore {
   selectSlotPopup = new Modal()
 
   selectedSlot: Optional<Slot> = null
-  setSelectedSlot = (slot: Slot) => { this.selectedSlot = slot }
+  setSelectedSlot = (slot: Slot) => { 
+    this.selectedSlot = slot
+  }
   slots: Slot[] = []
   setSlots(slots: Slot[]) {
     this.slots = slots
@@ -558,7 +560,10 @@ export class CartStore {
     const isToday = moment(this.date).isSame(new Date(), 'day')
     if (isToday) {
       this.availbaleSlots = this.slots.filter(this.isSlotActive)
-      if (this.selectedSlot && !this.availbaleSlots.find(slot => slot.VCode === this.selectedSlot?.VCode)) {
+      if (this.selectedSlot  // если слот уже выбрали и дата сегодняшняя
+        && this.selectedSlot.VCode !== '-1'  // и слот не на ближайщие 2 часа
+        && !this.availbaleSlots.find(slot => slot.VCode === this.selectedSlot?.VCode)  // и слот не является доступным
+      ) {
         this.selectedSlot = null
       }
     } else {
